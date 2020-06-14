@@ -11,7 +11,10 @@ class Local(models.Model):
         return f'{self.name}'
 
     def get_password(self):
-        return Password.objects.filter(location_id=self.id).order_by('-created_at').first().value
+        password = Password.objects.filter(location_id=self.id).order_by('-created_at').first()
+        if password:
+            return password.value
+        return f"There is no password available for {self.name}"
 
 
 class Password(models.Model):
