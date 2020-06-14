@@ -1,8 +1,25 @@
-<html>
-<head>
-    <title>Freedom of Wifis</title>
-</head>
-<body>
-    Webpage under construction.
-</body>
-</html>
+{% extends 'base.html' %}
+{% block 'title' %}Free of WiFis{% endblock %}
+{% block 'content' %}
+<h1 class="text-center">Parole pentru localuri in Cluj</h1>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+
+  <!-- Table -->
+  <table class="table table-hover">
+    <tr>
+        <th>Nume locatie</th>
+        <th>Adresa</th>
+        <th>Parola</th>
+    </tr>
+      {% for location in locations %}
+        <tr>
+            <td>{{ location.name }}</td>
+            <td>{{ location.location }}</td>
+            <td>{{ location.get_password }}</td>
+        </tr>
+      {% endfor %}
+  </table>
+</div>
+{% endblock %}

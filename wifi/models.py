@@ -10,6 +10,9 @@ class Local(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    def get_password(self):
+        return Password.objects.filter(location_id=self.id).order_by('-created_at').first().value
+
 
 class Password(models.Model):
     location = models.ForeignKey('Local', on_delete=models.CASCADE)
