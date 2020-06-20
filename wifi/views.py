@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic import CreateView
 
@@ -9,14 +10,14 @@ def index(request):
     return render(request, "index.html", {"locations": locations})
 
 
-class CreateLocal(CreateView):
+class CreateLocal(CreateView, LoginRequiredMixin):
     model = Local
     fields = ('name', 'location')
     template_name = "create_local.html"
     success_url = "/"
 
 
-class CreatePassword(CreateView):
+class CreatePassword(CreateView, LoginRequiredMixin):
     model = Password
     fields = ('value', 'location')
     template_name = "create_password.html"
