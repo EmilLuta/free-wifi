@@ -9,4 +9,5 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("verify_local/", views.verify_local, name="verify_local"),
     path("verify_local/<int:pk>", views.verify_this_local, name="verify_this_local"),
+    path("rest/", views.rest_locals),
 ]

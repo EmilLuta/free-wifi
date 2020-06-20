@@ -1,5 +1,8 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import BooleanField
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
@@ -59,3 +62,18 @@ def verify_this_local(request, pk):
     local.verified = True
     local.save()
     return redirect("/verify_local/")
+
+
+def rest_locals(request):
+    ls = Local.objects.all()
+    to_dump = []
+    for local in ls:
+        l = {
+            "name": local.name,
+            "address": local.location,
+            "password": local.get_password(),
+            "verified": local.verified
+        }
+        to_dump.append(l)
+    data = json.dumps(to_dump)
+    return HttpResponse(data, content_type='application/json')
