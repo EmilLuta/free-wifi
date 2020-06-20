@@ -21,3 +21,7 @@ class CreatePassword(CreateView):
     fields = ('value', 'location')
     template_name = "create_password.html"
     success_url = "/"
+
+
+def about(request):
+    return render(request, "about.html")
