@@ -6,12 +6,14 @@
   <div class="panel-heading">Informatii</div>
   <table class="table table-hover">
     <tr>
+        <th>ID</th>
         <th>Nume</th>
         <th>Adresa</th>
         <th>Parola</th>
     </tr>
       {% for location in locations %}
         <tr>
+            <td>{{ location.id }}</td>
             <td>{{ location.name }}</td>
             <td>{{ location.location }}</td>
             <td>{{ location.get_password }}</td>
