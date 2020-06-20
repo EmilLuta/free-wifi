@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.forms import BooleanField
+from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
 from .models import Local, Password
 
 
 def index(request):
-    locations = Local.objects.order_by('name').all()
+    locations = Local.objects.filter(verified=True).order_by('name').all()
     return render(request, "index.html", {"locations": locations})
 
 
@@ -16,6 +17,15 @@ class CreateLocal(LoginRequiredMixin, CreateView):
     template_name = "create_local.html"
     success_url = "/"
 
+    def form_valid(self, form):
+        response = super(CreateLocal, self).form_valid(form)
+        if self.request.user.is_staff:
+            self.object.verified = True
+        else:
+            self.object.verified = False
+        self.object.save()
+        return response
+
 
 class CreatePassword(LoginRequiredMixin, CreateView):
     model = Password
@@ -23,17 +33,29 @@ class CreatePassword(LoginRequiredMixin, CreateView):
     template_name = "create_password.html"
     success_url = "/"
 
-    # def form_valid(self, form):
-        # import code
-        # code.interact(local=dict(globals(), **locals()))
-        # try:
-        #     user = User.objects.get(email=form.email)
-        # except User.DoesNotExist:
-        #     user = User.objects.create_user(form.email, form.email, ''.join(
-        #         [random.choice(string.digits + string.letters) for i in range(0, 10)]))
-        #     user.save()
-        # form.instance.user = user
-        # return super(ProjectCreateDetails, self).form_valid(form)
+    def form_valid(self, form):
+        response = super(CreatePassword, self).form_valid(form)
+        if self.request.user.is_staff:
+            self.object.verified = True
+        else:
+            self.object.verified = False
+        self.object.save()
+        return response
+
 
 def about(request):
     return render(request, "about.html")
+
+
+def verify_local(request):
+    if request.user.is_staff:
+        all_unverified_locals = Local.objects.filter(verified=False).all()
+        return render(request, "verify_locals.html", {"locals": all_unverified_locals})
+    return redirect("/accounts/login/")
+
+
+def verify_this_local(request, pk):
+    local = Local.objects.get(id=pk)
+    local.verified = True
+    local.save()
+    return redirect("/verify_local/")

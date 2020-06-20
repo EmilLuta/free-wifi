@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block 'title' %}Freedom of WiFis{% endblock %}
+{% block 'content' %}
+<h1 class="text-center">Verifica Localuri</h1>
+<div class="panel panel-default">
+  <table class="table table-hover">
+    <tr>
+        <th>ID</th>
+        <th>Nume</th>
+        <th>Adresa</th>
+        <th>Parola</th>
+        <th>Verifica</th>
+    </tr>
+      {% for location in locals %}
+        <tr>
+            <td>{{ location.id }}</td>
+            <td>{{ location.name }}</td>
+            <td>{{ location.location }}</td>
+            <td>{{ location.get_password }}</td>
+            <td><a href="{% url 'verify_this_local' location.id %}">Verify Local</a></td>
+        </tr>
+      {% endfor %}
+  </table>
+</div>
+{% endblock %}
